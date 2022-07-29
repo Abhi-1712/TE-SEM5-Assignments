@@ -37,7 +37,7 @@ CREATE()
 
 ADD() 
 { 
-	if [ -z $file_name ]  # checks if file lenght is zero
+	if [ -z $file_name ]  # checks if file length is zero
 	then
 		echo -e "${MAGNETA}Please create or select file first before adding contents!!!!!${ENDCOLOR}"
 	
