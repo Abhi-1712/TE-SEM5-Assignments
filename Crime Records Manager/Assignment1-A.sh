@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Roll No 33231
-# Abhijeet Ingle
-# K-10
+# Roll-No: 33231
+# Name: Abhijeet Ingle
+# Batch: K-10
+
 # This section is used to store color codes which will be displayed during output
 
 RED="\e[31m"
@@ -12,6 +13,9 @@ ENDCOLOR="\e[0m"
 CYAN="\e[36m"
 YELLOW="\e[33m"
 BLUE="\e[34m"
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~CREATE FUNCTION~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 CREATE() 
 { 
@@ -35,6 +39,9 @@ CREATE()
 	fi
 }
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ADD FUNCTION~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ADD() 
 { 
 	if [ -z $file_name ]  # checks if file length is zero
@@ -55,11 +62,38 @@ ADD()
 		read Reason
 		
 		echo -e "DATE:(DD:MM:YYYY):"
-		read DATE
+		read -p "ENTER DAY(DD):" DAY
+		read -p "ENTER MONTH(MM):" MONTH
+		read -p "ENTER YEAR(YYYY):" YEAR
+		
+		# VALIDATING DATE
+		
+		if (($DAY < 1 || $DAY > 31));
+		then
+			echo -e "${YELLOW}ERROR:${ENDCOLOR}${MAGNETA}DAY should be between 1-31${ENDCOLOR}"
+			return
+		fi
+		
+		if (($MONTH < 1 || $MONTH > 12));
+		then
+			echo -e "${YELLOW}ERROR:${ENDCOLOR}${MAGNETA}MONTH should be between 1-12${ENDCOLOR}"
+			return
+		fi	
+		
+		if (($YEAR < 1600 || $YEAR > 2022));
+		then
+			echo -e "${YELLOW}ERROR:${ENDCOLOR}${MAGNETA}DAY should be between 1600-2022${ENDCOLOR}"
+			return
+		fi
+		
+		
+		DATE="$DAY:$MONTH:$YEAR"
 		
 		echo -e "$CaseID|$Complainer|$Accused|$Reason|$DATE"   >> $file_name.txt
 	fi
 }
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~DISPLAY FUNCTION~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 DISPLAY()
 {
@@ -67,6 +101,10 @@ DISPLAY()
 	cat $file_name.txt | column -t -s "|"
 	echo -e "${GREEN}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${ENDCOLOR}"
 }
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~DELETE FUNCTION~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 DELETE() 
 { 
 	echo -e "${MAGNETA}Enter the CaseID which is to be deleted:${ENDCOLOR}"
@@ -87,12 +125,15 @@ DELETE()
 	fi
 }
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~MODIFY FUNCTION~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 MODIFY()
 {
 	echo -e "${MAGNETA}Enter the CaseID to modify the Case Entry:${ENDCOLOR}"
 	read modify_CaseID
-	
-	if [ `cat $file_name.txt | grep $modify_CaseID | wc -l` -eq 0 ]
+	check_flag=`cat $file_name.txt | grep $modify_CaseID | wc -l`
+	if [ $check_flag -eq 0 ]
 	then
 		echo -e "${YELLOW}Entered CaseID doesn't exist, Check Again!!!${ENDCOLOR}"
 	else
@@ -103,7 +144,37 @@ MODIFY()
 		read -p "Enter Name of Complainer:" New_Complainer
 		read -p "Enter Name of Accused:" New_Accused 
 		read -p "Enter Reason:" New_Reason 
-		read -p "Enter Date(DD:MM:YYYY):" New_Date 
+		echo -e "DATE:(DD:MM:YYYY):"
+		read -p "ENTER DAY(DD):" DAY
+		read -p "ENTER MONTH(MM):" MONTH
+		read -p "ENTER YEAR(YYYY):" YEAR
+		
+		
+		# VALIDATING DATE
+		
+		if (($DAY < 1 || $DAY > 31));
+		then
+			echo -e "${YELLOW}ERROR:${ENDCOLOR}${MAGNETA}DAY should be between 1-31${ENDCOLOR}"
+			return
+		fi
+		
+		if (($MONTH < 1 || $MONTH > 12));
+		then
+			echo -e "${YELLOW}ERROR:${ENDCOLOR}${MAGNETA}MONTH should be between 1-12${ENDCOLOR}"
+			return
+		fi	
+		
+		if (($YEAR < 1600 ||5 $YEAR > 2022));
+		then
+			echo -e "${YELLOW}ERROR:${ENDCOLOR}${MAGNETA}DAY should be between 1600-2022${ENDCOLOR}"
+			return
+		fi
+		
+		
+		DATE="$DAY:$MONTH:$YEAR"
+		
+		
+		
 		
 		new_line="$modify_CaseID|$New_Complainer|$New_Accused|$New_Reason|$New_Date"
 		
@@ -114,6 +185,10 @@ MODIFY()
 }
 
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~MAIN CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# MENU
 echo -e "${GREEN}CRIME DATABASE ${ENDCOLOR}"
 echo -e "${CYAN}Select an Operation (Enter q to exit)\nEnter : \n  c to Create New file or Select Existing File\n  a to ADD Entries to File \n  d to Display File \n  de to Delete Case Content\n  m to Modify File \n  q to Exit ${ENDCOLOR}"
 read Operation
@@ -124,7 +199,7 @@ do
 
 	
 	
-	case $Operation in
+	case $Operation in  # CASE FOR VARIOUS OPTIONS ; FUNCTIONS CALL FOR RESPECTIVE OPTIONS
 		
 		c)
 		CREATE 
@@ -147,7 +222,7 @@ do
 		;;
 		
 		
-		*)
+		*)   # ERROR MESSAGE FOR IRRELEVANT ENTRIES
 		echo "Invalid Entry!!!"
 		;;
 		
@@ -156,7 +231,10 @@ do
 	echo -e "${CYAN}Select an Operation (Enter q to exit)\nEnter : \n  c to Create New file or Select Existing File\n  a to ADD Entries to File \n  d to Display File \n  de to Delete Case Content\n  m to Modify File \n  q to Exit${ENDCOLOR}"
 	read Operation
 
-done		
-# Roll No 33231
-# Abhijeet Ingle
-# K-10
+done	
+	
+# Roll-No: 33231
+# Name: Abhijeet Ingle
+# Batch: K-10
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
