@@ -1,10 +1,13 @@
-#include <stdio.h>
+//  Roll-No: 33231
+//  Name: Abhijeet Ingle
+//  Batch: K-10
 
-//n-pages  page_seq-page_arr  
+#include <stdio.h>
 
 int main()
 {
-	int pages;	
+	int pages;
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");	
 	printf("Enter the number of pages\n");
 	scanf("%d", &pages);
 	int page_arr[pages];
@@ -26,7 +29,7 @@ int main()
 	{
 		scanf("%d", &page_arr[i]);
         }
-	
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	int x=0;
 	for(int i=0;i<pages;i++)
 	{
@@ -62,9 +65,9 @@ int main()
 		printf("\n");
 			
 	}
-	
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	printf("Total page faults : %f\n", page_faults);
         printf("Page Fault ratio : %f\n", page_faults / pages);
-	
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	
 }
