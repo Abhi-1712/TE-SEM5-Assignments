@@ -1,5 +1,5 @@
 # SEM5 Assignments
- If any changes are required, feel free create pull request.
+ If any changes are required, feel free to create a pull request.
 <hr/>
 
 <p>Maintained by:
