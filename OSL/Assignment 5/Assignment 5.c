@@ -2,18 +2,19 @@
 Problem Statement - Implement C program for Deadlock Avoidance: Banker’sAlgorithm
 */
 
-#include <bits/stdc++.h>
-using namespace std;
+// #include <bits/stdc++.h>
+// using namespace std;
+#include <stdio.h>
 #define NO_OF_RESOURCE_INSTANCES 3
 #define NO_OF_PROCESSES 5
 
 struct process
 {
-    int rank = 0, allocation[NO_OF_RESOURCE_INSTANCES], max_need[NO_OF_RESOURCE_INSTANCES], need[NO_OF_RESOURCE_INSTANCES] = { 0 };
+    int rank, allocation[NO_OF_RESOURCE_INSTANCES], max_need[NO_OF_RESOURCE_INSTANCES], need[NO_OF_RESOURCE_INSTANCES];
 };
 
 int available[NO_OF_RESOURCE_INSTANCES] = { 2, 1, 0 };
-process given[NO_OF_PROCESSES] = {
+struct process given[NO_OF_PROCESSES] = {
     {0, {1, 1, 2}, {4, 3, 3}, {0}},
     {0, {2, 1, 2}, {3, 2, 2}, {0}},
     {0, {4, 0, 1}, {9, 0, 2}, {0}},
@@ -24,42 +25,42 @@ void display_resource_instances(int instances[], int no_of_instances)
 {
     for (int i = 0; i < no_of_instances; i++)
     {
-        cout << instances[i] << " ";
+        printf("%d ", instances[i]);
     }
     return;
 }
 
-void display_table(process given[])
+void display_table(struct process given[])
 {
-    cout << "\n------------------------------------------------";
-    cout << "\n| Processes | Allocation |   Max   | Available | ";
-    cout << "\n------------------------------------------------";
-    // cout << "\n|    P1     |   4 3 3    | 4 3 3 |   2 1 0   |";
+    printf("\n------------------------------------------------");
+    printf("\n| Processes | Allocation |   Max   | Available | ");
+    printf("\n------------------------------------------------");
+    // printf("\n|    P1     |   4 3 3    | 4 3 3 |   2 1 0   |";
     int no_of_completed_processes = 1;
     while (no_of_completed_processes <= NO_OF_PROCESSES)
     {
-        bool break_while = true;
+        int break_while = 1;
         size_t process;
         for (process = 0; process < NO_OF_PROCESSES; process++)
         {
             if (given[process].rank == no_of_completed_processes)
             {
-                cout << "\n|    P" << process + 1 << "     |   ";
+                printf("\n|    P %d     |   ", process + 1);
                 display_resource_instances(given[process].allocation, NO_OF_RESOURCE_INSTANCES);
-                cout << "   |  ";
+                printf("   |  ");
                 display_resource_instances(given[process].max_need, NO_OF_RESOURCE_INSTANCES);
-                cout << " |   ";
+                printf(" |   ");
                 display_resource_instances(available, NO_OF_RESOURCE_INSTANCES);
-                cout << "  |";
-                cout << "\n------------------------------------------------";
+                printf("  |");
+                printf("\n------------------------------------------------");
                 no_of_completed_processes++;
-                break_while = false;
+                break_while = 0;
             }
         }
         if (break_while && (process == NO_OF_PROCESSES))
             break;
     }
-    cout << endl;
+    printf("\n");
 };
 
 int main()
@@ -82,21 +83,21 @@ int main()
     */
 
     int isSafeState, isStarving, rank = 0;
-    // cout << "Process sequence: ";
-    while (true)
+    // printf("Process sequence: ";
+    while (1)
     {
         isSafeState = 0;
-        bool check_process;
+        int check_process;
         for (int process = 0; process < NO_OF_PROCESSES; process++)
         {
             if (given[process].rank == 0)
             {
-                check_process = true;
+                check_process = 1;
                 for (int resource = 0; resource < NO_OF_RESOURCE_INSTANCES; resource++)
                 {
                     if (given[process].need[resource] > available[resource])
                     {
-                        check_process = false;
+                        check_process = 0;
                         break;
                     }
                 }
@@ -111,7 +112,7 @@ int main()
                 given[process].rank = ++rank;
                 display_table(given);
                 isSafeState = 1;
-                // cout << "P" << process + 1 << " ";
+                // printf("P" << process + 1 << " ";
             }
         }
         isStarving = 0;
@@ -123,14 +124,14 @@ int main()
             }
             else if (!isSafeState)
             {
-                cout << "Deadlock condition!" << endl;
+                printf("Deadlock condition!\n");
                 return 0;
             }
         }
         if (isStarving >= NO_OF_PROCESSES)
         {
             display_table(given);
-            cout << "\nAll processes finished, CPU in idle state..." << endl;
+            printf("\nAll processes finished, CPU in idle state...\n");
             return 0;
         }
     }
