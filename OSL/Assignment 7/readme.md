@@ -26,6 +26,7 @@ int main()
     // Creating the named file(FIFO)
     // mkfifo(<pathname>, <permission>)
     mkfifo(myfifo, 0666);
+    printf("----------------\nUser 1 Area\n----------------\n\n");
 
     char arr1[180], arr2[180];
     while (1)
@@ -35,13 +36,15 @@ int main()
 
         // Take an input arr2ing from user.
         // 80 is maximum length
+        printf("----------------\nUser 1 -\n\tEnter message (press enter to stop): ");
         fgets(arr2, 180, stdin);
 
         // Write the input arr2ing on FIFO
         // and close it
         write(fd, arr2, strlen(arr2) + 1);
         close(fd);
-
+        printf("\n\t>>>> User 1 waiting for User 2 to write stats in pipe\n");
+	sleep(5);
         // Open FIFO for Read only
         fd = open(myfifo, O_RDONLY);
 
@@ -49,7 +52,7 @@ int main()
         read(fd, arr1, sizeof(arr1));
 
         // Print the read message
-        printf("User2: %s\n", arr1);
+        printf("\tStats received from User 2 : %s\n-----------------\n\n", arr1);
         close(fd);
     }
     return 0;
@@ -78,16 +81,18 @@ int main()
     // Creating the named file(FIFO)
     // mkfifo(<pathname>,<permission>)
     mkfifo(myfifo, 0666);
+    printf("----------------\nUser 2 Area\n----------------\n\n");
 
     char str1[180], str2[180];
     while (1)
     {
         // First open in read only and read
+        printf("-----------------\nWaiting for User 1...\n");
         fd1 = open(myfifo, O_RDONLY);
         read(fd1, str1, 180);
 
         // Print the read string and close
-        printf("User1: %s\n", str1);
+        printf("\tUser 1 sent : %s\n", str1);
         close(fd1);
 
         // Counting sentences and words
@@ -102,13 +107,14 @@ int main()
                 sen++;
         }
 
-        sprintf(str2, "Words : %d Sentences : %d", wor, sen);
+        sprintf(str2, "Words : %d Sentences : %d", ++wor, sen);
 
         // Now open in write mode and write
         // string taken from user.
         fd1 = open(myfifo, O_WRONLY);
-        scanf("\n");
+        printf("\n\t>>>> Sending stats to User 1");
         write(fd1, str2, strlen(str2) + 1);
+        printf("\n\t>>>> Sent!\n---------------------\n\n");
         close(fd1);
     }
 
@@ -119,12 +125,60 @@ int main()
 ###### **Output**
 
 ```text
-abhishek-jadhav@abhishek-jadhav-ubuntu:~/Codes/OS Assignments/33232$ ./a.out
-write first then read
+Terminal 1 (7a_writer.c) - 
+abhishek-jadhav@abhishek-jadhav-ubuntu:~/Codes/TE-SEM5-Assignments/OSL/Assignment 7/7a$ ./pipe1
+----------------
+User 1 Area
+----------------
 
-abhishek-jadhav@abhishek-jadhav-ubuntu:~/Codes/OS Assignments/33232$ ./b.out
-User1: write first then read
+----------------
+User 1 -
+	Enter message (press enter to stop): Hey User 2 :)
 
+	>>>> User 1 waiting for User 2 to write stats in pipe
+	Stats received from User 2 : Words : 4 Sentences : 0
+-----------------
+
+----------------
+User 1 -
+	Enter message (press enter to stop): My first sentence. And, this is my second sentence.
+
+	>>>> User 1 waiting for User 2 to write stats in pipe
+	Stats received from User 2 : Words : 9 Sentences : 2
+-----------------
+
+----------------
+User 1 -
+	Enter message (press enter to stop): ^C
+```
+```text
+Terminal 2 (7a_reader.c) -
+abhishek-jadhav@abhishek-jadhav-ubuntu:~/Codes/TE-SEM5-Assignments/OSL/Assignment 7/7a$ ./pipe2
+----------------
+User 2 Area
+----------------
+
+-----------------
+Waiting for User 1...
+	User 1 sent : 'Hey User 2 :)
+'
+
+	>>>> Sending stats to User 1
+	>>>> Sent!
+---------------------
+
+-----------------
+Waiting for User 1...
+	User 1 sent : 'My first sentence. And, this is my second sentence.
+'
+
+	>>>> Sending stats to User 1
+	>>>> Sent!
+---------------------
+
+-----------------
+Waiting for User 1...
+^C
 ```
 
 ---
